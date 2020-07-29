@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/fontawesome.js" data-auto-replace-svg="nest"></script>
+</head>
+
+<body>
+  {% block content %}
+  {% include 'Instagram/_navbar.html' %}
+  {% endblock %}
+  <div class="container">
+    <br />
+    {% include 'Instagram/_messages.html' %}
+    <div class="row" style="padding-top: 2rem;padding-left: 3rem;">
+      <h5>Showing results for <span style="color:blue">"{{searchedString}}"</span></h5>
+    </div>
+    {% if userDetails | length > 0 %}
+    {% for u in userDetails %}
+    <a href="/userProfile?user={{u.email}}">
+      <div class="row searchRow">
+        <div class="col-sm-1">
+          {% if u.userImg %}
+          <img class="avatar" src="/view_photo/{{u.userImg}}"/>
+          {% else %}
+          <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+          {% endif %}
+        </div>
+        <div class="col-sm-10" style="margin-left: -1rem;">
+          <div class="h5">{{u.userName}}</div>
+          <span class="text-muted">{{u.email}}</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+    {% else %}
+    <div class="row searchRow">
+      <h6>Users not present with name <span style="color:blue">"{{searchedString}}"</span></h6>
+    </div>
+    {% endif %}
+    <hr>
+  </div>
+</body>
+{% endautoescape %}

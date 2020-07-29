@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/jquery-1.11.0.min.js"></script>
+  <script src="/bootstrap/js/fontawesome.js" data-auto-replace-svg="nest"></script>
+</head>
+<body>
+  {% block content %}
+  {% include 'Instagram/_navbar.html' %}
+  {% endblock %}
+  <div class="container">
+    {% include 'Instagram/_messages.html' %}
+    <div class="row" style="margin-top:3rem; display: flex;">
+      <div class="text-center" style="display:flex;margin-left: auto;margin-right: auto;">
+        <div class="col-sm-3">
+          {% if user.email() == userProfile.email %}
+          <div class="opacitybalance">
+            <a href="#exampleModal" data-toggle="modal" >
+            {% if userProfile.userImg %}
+            <img class="avatar userProf p-image" src="/view_photo/{{userProfile.userImg}}" style="width: 150px;height: 150px;"/>
+            {% else %}
+            <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar userProf p-image" style="width: 150px;height: 150px;padding:0px;">
+            {% endif %}
+            <div class="middle">
+              <div class="text" style="margin-left: 0.9rem;"><h4><i class="fas fa-camera"></i></h4>Update</div>
+            </div>
+            </a>
+          </div>
+          {% else %}
+          {% if userProfile.userImg %}
+          <img class="avatar userProf" src="/view_photo/{{userProfile.userImg}}" style="width: 150px;height: 150px;"/>
+          {% else %}
+          <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar userProf" style="width:150px;height:150px;padding:0px;">
+          {% endif %}
+          {% endif %}
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Update Profile Picture</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <input name="file" type="file" class="form-control" accept="image/png, image/jpg" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Profile</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4" style="padding:1rem">
+          <div class="h5">{{userProfile.userName}}</div>
+          <span class="text-muted">{{userProfile.email}}</span>
+          <div class="row">
+            {% set row_c = "col-sm-12" %}
+            {% if followBtn == "Unfollow" %}
+            {% set row_c = "col-sm-6" %}
+            <div class="col-sm-6" style="padding: .6rem;">
+              <span class="badge badge-success"><i class="fas fa-user-check"></i> Following</span>
+            </div>
+            {% endif %}
+            <div class="{{row_c}}">
+              {% if user.email() != userProfile.email %}
+              <a class="btn btn-{{btn}} btn-sm followbtn" href="/follow_unfollow?user={{userProfile.email}}&btn={{followBtn}}" role="button" style="margin-top: .5rem;">
+                <i class="fas fa-user-{{btnIcon}}"></i> {{followBtn}}
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5" style="padding:1rem;">
+          <div class="col-sm-12" style="display:flex">
+            <div class="col-sm-6">
+              {% if userProfile.followers != None %}
+              {% set followers = userProfile.followers|length %}
+              <h5><span class="badge badge-warning">{{followers}}</span></h5>
+              {% else %}
+              <h5><span class="badge badge-warning">0</span></h5>
+              {% endif %}
+              <a class="btn btn-primary" href="#followers" data-toggle="modal" role="button">Followers</a>
+
+              <!-- Modal -->
+              <div class="modal fade" id="followers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Followers</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="container">
+                        {% if followerUsers | length > 0 %}
+                        {% for follower in followerUsers %}
+                        <a href="/userProfile?user={{follower.email}}">
+                          <div class="row" style="padding:1rem">
+                            <div class="col-sm-2">
+                              {% if follower.userImg %}
+                              <img class="avatar" src="/view_photo/{{follower.userImg}}"/>
+                              {% else %}
+                              <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                              {% endif %}
+                            </div>
+                            <div class="col-sm-10" style="text-align: left;">
+                              <div class="h5">{{follower.userName}}</div>
+                              <span class="text-muted">{{follower.email}}</span>
+                            </div>
+                          </div>
+                        </a>
+                        {% endfor %}
+                        {% else %}
+                        <div class="row">
+                          <h6>No one follows you.</h6>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              {% if userProfile.following != None %}
+              {% set following = userProfile.following|length %}
+              <h5><span class="badge badge-warning">{{following}}</span></h5>
+              {% else %}
+              <h5><span class="badge badge-warning">0</span></h5>
+              {% endif %}
+              <a class="btn btn-primary" href="#following" data-toggle="modal" role="button">Following</a>
+
+              <!-- Modal -->
+              <div class="modal fade" id="following" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Following</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="container">
+                        {% if followingUsers | length > 0 %}
+                        {% for following in followingUsers %}
+                        <a href="/userProfile?user={{following.email}}">
+                          <div class="row" style="padding:1rem">
+                            <div class="col-sm-2">
+                              {% if following.userImg %}
+                              <img class="avatar" src="/view_photo/{{following.userImg}}"/>
+                              {% else %}
+                              <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                              {% endif %}
+                            </div>
+                            <div class="col-sm-10" style="text-align: left;">
+                              <div class="h5">{{following.userName}}</div>
+                              <span class="text-muted">{{following.email}}</span>
+                            </div>
+                          </div>
+                        </a>
+                        {% endfor %}
+                        {% else %}
+                        <div class="row">
+                          <h6>Not following anyone.</h6>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container">
+      <div class="row">
+        {% if userPosts | length > 0 %}
+        {% for post in userPosts %}
+        <div class="card" style="margin: 1rem;">
+          <div class="card-header" style="background-color: white">
+            <a href="/userProfile?user={{userProfile.email}}" style="color:black;text-decoration:none;display:flex;">
+              <div class="col-sm-2">
+                {% if userProfile.userImg %}
+                <img class="avatar" src="/view_photo/{{userProfile.userImg}}"/>
+                {% else %}
+                <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar">
+                {% endif %}
+              </div>
+              <div class="col-sm-10">
+                <h5 style="margin-bottom: 0rem;">{{userProfile.userName}}</h5>
+                <small class="text-muted">{{userProfile.email}}</small>
+              </div>
+            </a>
+          </div>
+          <a class="text-muted" href="/post/{{post.key.id()}}">
+          <div class="opacitybalance">
+            <img src="/view_photo/{{post.image}}" class="p-image" style="height: 514px;width: 514px;"/></a>
+            <div class="middle">
+              <div class="text"><i class="fas fa-comment"></i> {{ post.comments | length }} Comments</div>
+            </div>
+          </div>
+          <div style="display:flex;padding:1rem;padding-bottom:0.3rem;">
+
+            <a href="/post/{{post.key.id()}}" style="color:black">
+              <i class="far fa-heart fa-lg"></i>
+              <i class="far fa-comment fa-lg" style="padding-left:1rem;"></i></a>
+          </div>
+          {% if post.content %}
+            <div class="card-body" style="display:flex;padding:0px;padding-left:1rem;padding-bottom:.5rem;">
+              <p style="margin-right:0.3rem;"><b>{{userProfile.userName}}</b></p>
+              <p class="card-text">{{post.content}}</p>
+            </div>
+            <div class="card-body" style="padding:0px;padding-left:1rem;margin-top: -1.7rem;;margin-bottom: 1rem;">
+              <small class="text-muted" style="font-size: 60%;">Posted at {{post.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+            </div>
+          {% else %}
+          <div class="card-body" style="padding:0px;padding-left:1rem;margin-bottom: 1rem;">
+            <small class="text-muted" style="font-size: 60%;">Posted at {{post.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+          </div>
+          {% endif %}
+
+
+        </div>
+        {% endfor %}
+        {% else %}
+      <div style="margin-left: auto;margin-right: auto;">
+        <span class="text-muted h5">Not posted anything yet.</span>
+      </div>
+      {% endif %}
+      </div>
+    </div>
+<body>
+</html>
+{% endautoescape %}

@@ -1,0 +1,205 @@
+<html>
+<head>
+  <script src="/bootstrap/js/jquery-1.11.0.min.js"></script>
+  <script src="/bootstrap/js/fontawesome.js" data-auto-replace-svg="nest"></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="col-sm-12" style="display: flex;">
+      <div class="col-md-8 col-xs-10">
+        <div class="card" style="width: 92%;">
+          <div class="card-header">
+            Create Post
+          </div>
+          <form action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+            <div class="row" style="display:flex; margin:1rem;">
+              <div class="col-sm-1">
+                {% if currentUserProf.userImg %}
+                <img class="avatar" src="/view_photo/{{currentUserProf.userImg}}"/>
+                {% else %}
+                <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                {% endif %}
+              </div>
+              <div class="col-sm-11">
+                <div class="row" style="display:flex; margin:1rem; margin-top:0rem">
+                  <div class="col-sm-12">
+                    <div class="input-group mb-3 px-2 py-2 rounded-pill bg-gray shadow-sm">
+                      <input id="upload" name="file" type="file" onchange="readURL(this);" class="form-control border-0" accept="image/png, image/jpg" required>
+                      <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                      <div class="input-group-append">
+                        <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fas fa-cloud-upload-alt mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12" style="display:flex;">
+                    <div class="col-sm-4">
+                      <div class="image-area">
+                        <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                      </div>
+                    </div>
+                    <div class="col-sm-8">
+                      <textarea class="form-control" rows="2" placeholder="Whats on your mind?" name="content"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr style="width: 50rem;"/>
+              <div class="float-right"style="margin-left: auto;" >
+                <button type="submit" class="btn btn-primary float-right">Post</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+        {% if allpost %}
+        {% if allpost | length > 0 %}
+        {% for post in allpost %}
+        <div class="row">
+          <div class="card" style="margin: 1rem;">
+            <div class="card-header" style="background-color: white">
+              <a href="/userProfile?user={{post.owner.email}}" style="color:black;text-decoration:none;display:flex;">
+                <div class="col-sm-2">
+                  {% if post.owner.userImg %}
+                  <img class="avatar" src="/view_photo/{{post.owner.userImg}}"/>
+                  {% else %}
+                  <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                  {% endif %}
+                </div>
+                <div class="col-sm-10" style="margin-left: -2rem;">
+                  <h5 style="margin-bottom: 0rem;">{{post.owner.userName}}</h5>
+                  <small class="text-muted">{{post.owner.email}}</small>
+                </div>
+              </a>
+            </div>
+            <img src="/view_photo/{{post.image}}" style="height: 614px;width: 614px;"/>
+            <div style="display:flex;padding:1rem;padding-bottom:0.3rem;">
+              <a href="/post/{{post.key.id()}}" style="color:black">
+                <i class="far fa-heart fa-lg"></i>
+                <i class="far fa-comment fa-lg" style="padding-left:1rem;"></i></a>
+            </div>
+            {% if post.content %}
+              <div class="card-body" style="display:flex;padding:0px;padding-left:1rem;">
+                <p style="margin-right:0.3rem;"><b>{{post.owner.userName}}</b></p>
+                <p class="card-text">{{post.content}}</p>
+              </div>
+            {% else %}
+            <div style="margin-bottom:1rem"></div>
+            {% endif %}
+            <div class="card-body" style="padding:0px;padding-left:1rem;margin-top: -0.7rem;margin-bottom: 1rem;">
+              <small class="text-muted" style="font-size: 60%;">Posted at {{post.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+            </div>
+
+            <ul class="list-group list-group-flush">
+              {% if post.comments | length > 0 %}
+              <li class="list-group-item">
+                {% set i=1 %}
+                {% for comment in post.comments|reverse %}
+                  {% if i <= 5 %}
+                    <a href="/userProfile?user={{comment.commenter.email}}" style="color:black;text-decoration:none;display:flex;padding: .3rem;">
+                      <div class="col-sm-1">
+                        {% if comment.commenter.userImg %}
+                        <img class="avatar" src="/view_photo/{{comment.commenter.userImg}}" style="width:30px;height:30px;"/>
+                        {% else %}
+                        <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar" style="width:30px;height:30px;"/>
+                        {% endif %}
+                      </div>
+                      <div class="col-sm-10" style="margin-left: .5rem;">
+                        <div class="row" style="margin-bottom: -1rem;">
+                          <h6 style="margin-bottom: 0rem;font-weight: 600;">{{comment.commenter.userName}}</h6>
+                          <p style="margin-left:0.3rem;margin-top: -.2rem;">{{comment.commentDescription}}</p>
+                        </div>
+                        <div class="row">
+                          <small class="text-muted" style="font-size: 60%;">{{comment.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+                        </div>
+                      </div>
+                    </a>
+                    {% set i = i+1 %}
+                  {% endif %}
+                {% endfor %}
+                {% if post.comments | length > 5 %}
+                  <a class="text-muted" href="/post/{{post.key.id()}}">
+                    <small>Show all comments...</small>
+                  </a>
+                {% endif %}
+                </li>
+              {% endif %}
+
+              <li class="list-group-item">
+                <form action="/add_comment/{{post.key.id()}}?ad=home" method="post" style="display: flex;">
+                  <div class="col-sm-11" style="margin-left: -1rem;">
+                    <textarea maxlength="200" required class="form-control comment" rows="1" placeholder="Add a comment (limit 200 characters)..." name="comment" style="border-width:0px"></textarea>
+                  </div>
+                  <div class="col-sm-1">
+                    <button type="submit" class="commentPost">Post</button>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="row" style="padding:1rem">
+          <span class="text-muted h6">There are no posts available.</span>
+        </div>
+        {% endif %}
+        {% endif %}
+      </div>
+      <div class="col-md-4 col-xs-2">
+        <div class="row" style="margin-left: -3rem;">
+          <div class="card">
+            <div class="card-body">
+            <a href="/userProfile?user={{user.email()}}" style="color:black;text-decoration:none;display:flex;">
+              <div class="col-sm-3">
+                {% if currentUserProf.userImg %}
+                <img class="avatar" src="/view_photo/{{currentUserProf.userImg}}"/>
+                {% else %}
+                <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                {% endif %}
+              </div>
+              <div class="col-sm-9" style="display: grid;">
+                <span class="h5">{{userName}}</span>
+                <small class="text-muted">{{user.email()}}</small>
+              </div>
+            </a>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#imageResult')
+                .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$(function () {
+    $('#upload').on('change', function () {
+        readURL(input);
+    });
+});
+
+var input = document.getElementById( 'upload' );
+console.log(input)
+var infoArea = document.getElementById( 'upload-label' );
+
+input.addEventListener( 'change', showFileName );
+function showFileName( event ) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea.textContent = 'File name: ' + fileName;
+}
+</script>
+<html>

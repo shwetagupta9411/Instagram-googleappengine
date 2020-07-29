@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+
+<head>
+  <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/fontawesome.js" data-auto-replace-svg="nest"></script>
+</head>
+
+<body>
+  {% block content %}
+  {% include 'Instagram/_navbar.html' %}
+  {% endblock %}
+  <div class="container">
+    <br />
+    {% include 'Instagram/_messages.html' %}
+
+    {% if user %}
+      {% if userName != None %}
+        </br>
+        {% include 'Instagram/_home.html' %}
+      {% else %}
+        </br>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="container">
+                <img src="./bootstrap/image/logo.png" style="width:120%;padding: 2rem;"/>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="vl"></div>
+            </div>
+            <div class="col-sm-6" style="padding: 4rem">
+              <div class="card" style="width: 25rem; ">
+                <main role="main" class="inner cover text-center" style="padding:1rem;">
+                  <img src="./bootstrap/image/insta.png" style="width:60%"/>
+                </main>
+                <div class="card-body">
+                  <form action="/update_user_name" method="post">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">User Name:</label>
+                      <input name = "userName" type="text" class="form-control" placeholder="Enter user name" required>
+                      <small class="form-text text-muted">User name should be unique and Only . and _ are allowed in user name.</small>
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary text-center">Save</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </row>
+        </div>
+      {% endif %}
+    {% else %}
+      <br>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="container">
+              <img src="./bootstrap/image/logo.png" style="width:120%;padding: 2rem;"/>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="vl"></div>
+          </div>
+          <div class="col-sm-6" style="padding: 4rem">
+            <div class="card" style="width: 25rem; ">
+              <main role="main" class="inner cover text-center" style="padding:1rem;">
+                <img src="./bootstrap/image/insta.png" style="width:60%"/>
+              </main>
+              <div class="card-body">
+                <p class="card-text text-center">Click the button to enter to the application.</p>
+                <div class="text-center">
+                  <a class="btn btn-primary" href="{{  url  }}"><i class="fas fa-sign-in-alt"></i> Login </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </row>
+      </div>
+    {% endif %}
+  </div>
+</body>
+
+</html>
+{% endautoescape %}

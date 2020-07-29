@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <script src="/bootstrap/js/fontawesome.js" data-auto-replace-svg="nest"></script>
+</head>
+
+<body>
+  {% block content %}
+  {% include 'Instagram/_navbar.html' %}
+  {% endblock %}
+  <div class="container">
+    {% include 'Instagram/_messages.html' %}
+    {% if user %}
+    <div class="row">
+      <div class="card" style="margin: 3rem;width:85%">
+        <div style="display:flex;">
+          <div class="col-sm-8" style="padding: 0rem;">
+            <img src="/view_photo/{{post.image}}" style="height: 614px;width: 614px;"/>
+          </div>
+          <div class="col-sm-4" style="padding: 0rem;margin-left: -1rem;">
+            <div class="card-header" style="width: 110%;margin-left: -5%;">
+              <a href="/userProfile?user={{post.owner.email}}" style="color:black;text-decoration:none;display:flex;">
+                <div class="col-sm-2">
+                  {% if post.owner.userImg %}
+                  <img class="avatar" src="/view_photo/{{post.owner.userImg}}"/>
+                  {% else %}
+                  <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar"/>
+                  {% endif %}
+                </div>
+                <div class="col-sm-10" style="margin-left: 1rem;">
+                  <h5 style="margin-bottom: 0rem;">{{post.owner.userName}}</h5>
+                  <small class="text-muted">{{post.owner.email}}</small>
+                </div>
+              </a>
+            </div>
+            {% if post.content %}
+            <div class="card-body" style="display:flex;margin-bottom: -1rem;">
+              <p style="margin-right:0.3rem;font-weight: 600;">{{post.owner.userName}}</p>
+              <p class="card-text">{{post.content}}</p>
+            </div>
+            <div class="card-body" style="padding:0px;padding-left:1.3rem;margin-top: -2.5rem;margin-bottom: 1rem;">
+              <small class="text-muted" style="font-size: 60%;">Posted at {{post.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+            </div>
+            {% else %}
+            <div class="card-body" style="padding:0px;">
+              <small class="text-muted" style="font-size: 60%;">Posted at {{post.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+            </div>
+            {% endif %}
+            <ul class="list-group list-group-flush" style="width:109%;margin-left:-4%;height:29.4rem;">
+                {% if post.comments | length > 0 %}
+                <li class="list-group-item" style="overflow: hidden;overflow-y: scroll;">
+                  {% for comment in post.comments|reverse %}
+                    <a href="/userProfile?user={{comment.commenter.email}}" style="color:black;text-decoration:none;display:flex;padding: .3rem;">
+                      <div class="col-sm-2">
+                        {% if comment.commenter.userImg %}
+                        <img class="avatar" src="/view_photo/{{comment.commenter.userImg}}" style="width:30px;height:30px;"/>
+                        {% else %}
+                        <img src="/bootstrap/image/avatar.png" alt="Avatar" class="avatar" style="width:30px;height:30px;"/>
+                        {% endif %}
+                      </div>
+                      <div class="col-sm-9">
+                        <div class="row" style="margin-bottom: -1rem;">
+                          <h6 style="margin-bottom: 0rem;font-weight: 600;">{{comment.commenter.userName}}</h6>
+                          <p style="margin-left:0.3rem;margin-top: -.2rem;">{{comment.commentDescription}}</p>
+                        </div>
+                        <div class="row">
+                          <small class="text-muted" style="font-size: 60%;">{{comment.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</small>
+                        </div>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </li>
+                {% endif %}
+
+
+              <li class="list-group-item" style="margin-bottom: -3.5rem;">
+                <form action="/add_comment/{{post.key.id()}}?ad=postDetail" method="post" style="display: flex;">
+                  <div class="col-sm-11" style="margin-left: -1rem;">
+                    <textarea maxlength="200" required class="form-control comment" rows="2" placeholder="Add a comment (limit 200 characters)..." name="comment" style="border-width:0px"></textarea>
+                  </div>
+                  <div class="col-sm-1">
+                    <button type="submit" class="commentPost" style="margin-left: -1rem;margin-top: 1rem;">Post</button>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</body>
+{% endautoescape %}

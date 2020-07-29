@@ -1,0 +1,47 @@
+1. Bracket 1 (10%)
+• Write the shell of an application that has a working login/logout
+service.
+• Create models of a user and posts using appropriate datatypes.
+– If a user logs in for the first time a user model should be created
+for them.
+– Each user should have a following (people who they are following)
+and a followers list (people who follow them)
+2. Bracket 2 (20%)
+• Add the ability for a user to create a post.
+– The post must take an image upload (filtered to JPG or PNG
+on the client side).
+– and should allow the addition of a text caption.
+3. Bracket 3 (30%)
+• Add in a profile page for a user.
+– This should show a reverse chronological timeline of all the user’s
+posts.
+– Should show numbers of how many they follow and how many
+are following them.
+– If this is the profile of a different user this should show a follow/unfollow button.
+• Add in the ability to search for a user by username
+– Users should get a list of names back.
+– Clicking on a name will bring them to the profile for that user.
+4. Bracket 4 (40%)
+• Add the ability for a user A to follow another user B
+– This should put the B in A’s following list.
+– and A in B’s followers list.
+• Create a timeline on the main page that does the following
+– Pulls the last 50 posts in reverse chronological order from the
+current user and their following list.
+– Displays the last 50 posts in a vertical timeline.
+5. Bracket 5 (50%)
+• If the number of followers on the profile is clicked it should go to a
+new page showing the full list of followers.
+• If the number of following on the profile is clicked it should go to a
+new page showing the full list of following.
+4
+6. Bracket 6 (60%)
+• Add in the ability for users to add comments on any post.
+– Limit this to 200 characters maximum per post.
+– These should be shown in reverse chronological order.
+– Post should be shown as the username then the text they wrote.
+7. Bracket 7 (70%)
+• In the main timeline only show the last 5 comments in each post
+– Add an expand button to posts that have more than 5 comments.
+– If the button is clicked it should go to a separate page or expand
+the columns in the current timeline.

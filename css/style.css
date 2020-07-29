@@ -1,0 +1,125 @@
+.instaback {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%)!important;
+}
+body{
+  background-color: #fafafa!important;
+}
+.SvO5t {
+  background-color: #262626;
+  height: 28px;
+  margin: 0 16px;
+  width: 1px;
+  margin-right: .5rem;
+}
+.usersearch{
+  opacity: 0.5
+}
+.usersearch:hover{
+    opacity: 1
+}
+.logoFix{
+  display:flex;
+  margin-right: -65%;
+  flex-wrap: wrap;
+  width: 80%;
+  color:#333433
+}
+.vl {
+  border-left: 2px solid #e13588;
+  height: 25rem;
+  position: absolute;
+  left: 45%;
+}
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+#upload {
+    opacity: 0;
+}
+
+#upload-label {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+}
+
+.image-area {
+    border: 2px dashed gray;
+    padding: 1rem;
+    position: relative;
+}
+
+.image-area::before {
+    content: 'Uploaded Image';
+    font-weight: bold;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.4rem;
+    z-index: 1;
+}
+
+.image-area img {
+    z-index: 2;
+    position: relative;
+}
+.bg-gray{
+  background: gainsboro;
+}
+.rounded-pill {
+    border-radius: 50rem!important;
+}
+.searchRow {
+  padding: 1rem;
+  background-color: white;
+  border-bottom: solid gray;
+  border-width: 1px;
+  margin-top: 1rem;
+}
+.searchRow:hover {
+  transform: scale(1.01);
+}
+.iconcolor{
+  color:white!important;
+}
+.iconcolor:hover{
+  color: rgba(255,255,255,.5)!important;
+}
+.comment:focus {
+    box-shadow: none !important;
+}
+.commentPost{
+  border-width: 0px;
+  color: #007bff;
+  font-weight: 600;
+  padding-top: .5rem;
+}
+.opacitybalance:hover .p-image {
+  opacity: 0.3;
+}
+.middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.opacitybalance:hover .middle{
+  opacity: 1;
+}
+.userProf{
+  border: solid;
+  padding: 5px;
+  border-width: 2px;
+  border-color: gainsboro;
+}
